@@ -60,3 +60,23 @@ body {
 .difficulty-row {
   margin-top:5px;
 }
+
+.toggle-container {
+  position: relative;
+  top: 20px;
+  left: 20px;
+  margin-bottom:20px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.toggle-container label {
+  margin-right: 10px;
+}
+
+.toggle-container select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

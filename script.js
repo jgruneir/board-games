@@ -33,7 +33,7 @@ const boardGames = [
   { name: "Exploding Kittens", description: "A card game that involves kittens and a bit of controlled chaos.", bggLink: "https://boardgamegeek.com/boardgame/172225/exploding-kittens", complexity: 1 },
   { name: "Here to Slay", description: "A card game about assembling a party of adventurers and slaying monsters.", bggLink: "https://boardgamegeek.com/boardgame/299252/here-slay", complexity: 4 },
   { name: "Boss Monster", description: "A retro-inspired card game where you build dungeons to lure and defeat heroes.", bggLink: "https://boardgamegeek.com/boardgame/131835/boss-monster-dungeon-building-card-game", complexity: 4 },
-  { name: "Targi", description: "A two-player game set in the desert, where you trade and collect goods.", bggLink: "https://boardgamegeek.com/boardgame/115048/targi", complexity: 5 },
+  { name: "Targi", description: "A two-player game set in the desert, where you trade and collect goods.", bggLink: "https://boardgamegeek.com/boardgame/118048/targi", complexity: 5 },
   { name: "Team3", description: "A cooperative party game that involves building with blocks while following specific rules.", bggLink: "https://boardgamegeek.com/boardgame/247694/team3-pink", complexity: 1 },
   { name: "Codenames Duet", description: "A cooperative version of the popular word game Codenames.", bggLink: "https://boardgamegeek.com/boardgame/224037/codenames-duet", complexity: 2 },
   { name: "Patchwork", description: "A two-player game about creating a quilt by strategically placing fabric pieces.", bggLink: "https://boardgamegeek.com/boardgame/163412/patchwork", complexity: 2 },
@@ -49,54 +49,152 @@ const boardGames = [
 ];
 
 const container = document.querySelector('.container');
-boardGames.sort((a, b) => b.complexity - a.complexity);
 
-boardGames.forEach(game => {
-  const box = document.createElement('div');
-  box.className = 'box';
-
-  const name = document.createElement('h2');
-  name.textContent = game.name;
-
-  const detailsContainer = document.createElement('div');
-  detailsContainer.className = 'details-container';
-  detailsContainer.style.display = 'none'; // Initially hidden
-
-  const description = document.createElement('p');
-  description.textContent = game.description;
-
-  const link = document.createElement('a');
-  link.href = game.bggLink;
-  link.textContent = 'Learn More';
-
-  const difficultyRow = document.createElement('p');
-  difficultyRow.classList.add('difficulty-row');
-
-  if (game.complexity >= 1 && game.complexity <= 3) {
-    difficultyRow.innerHTML = '<strong style="color: green; margin: 0;">Easy</strong>';
-  } else if (game.complexity >= 4 && game.complexity <= 6) {
-    difficultyRow.innerHTML = '<strong style="color: blue; margin: 0;">Medium</strong>';
-  } else if (game.complexity >= 7 && game.complexity <= 8) {
-    difficultyRow.innerHTML = '<strong style="color: orange; margin: 0;">Complex</strong>';
-  } else {
-    difficultyRow.innerHTML = '<strong style="color: red; margin: 0;">Highly Complex</strong>';
-  }
-
-  name.addEventListener('click', () => {
-    detailsContainer.style.display = detailsContainer.style.display === 'none' ? 'block' : 'none';
+// Fetch ratings for all games
+Promise.all(boardGames.map(game => getRating(game)))
+  .then(() => {
+    // Once all ratings are fetched, sort and render the board games
+    sortBoardGames();
+  })
+  .catch(error => {
+    console.error('Error fetching game ratings:', error);
   });
 
-    // Adjust font size for longer game names
-  if (game.name.length > 23) {
-    name.style.fontSize = '1rem'; // Adjust this value as needed
+
+let sortOption = 'rating'; // Default sort option
+
+// Sort the board games based on the initial option
+sortBoardGames();
+
+
+document.getElementById('sortToggle').addEventListener('change', () => {
+  sortOption = document.getElementById('sortToggle').value;
+  sortBoardGames();
+});
+
+async function sortBoardGames() {
+  container.innerHTML = ''; // Clear the container before re-rendering
+
+  if (sortOption === 'rating') {
+    boardGames.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  } else if (sortOption === 'complexity') {
+    boardGames.sort((a, b) => b.complexity - a.complexity);
   }
 
-  detailsContainer.appendChild(description);
-  detailsContainer.appendChild(link);
+  for (const game of boardGames) {
+    const box = document.createElement('div');
+    box.className = 'box';
 
-  box.appendChild(name);
-  box.appendChild(difficultyRow);
-  box.appendChild(detailsContainer);
+    const name = document.createElement('h2');
+    name.textContent = game.name;
 
-  container.appendChild(box);
-});
+    const detailsContainer = document.createElement('div');
+    detailsContainer.className = 'details-container';
+    detailsContainer.style.display = 'none'; // Initially hidden
+
+    const description = document.createElement('p');
+    description.textContent = game.description;
+
+    const link = document.createElement('a');
+    link.href = game.bggLink;
+    link.textContent = 'Learn More';
+
+    const complexityColor = getComplexityColor(game.complexity);
+
+    const complexitySymbol = document.createElement('span');
+    complexitySymbol.classList.add('game-complexity');
+    complexitySymbol.textContent = getComplexitySymbol(game.complexity);
+    complexitySymbol.style.color = complexityColor;
+
+    const difficultyText = document.createElement('p');
+    difficultyText.classList.add('difficulty-row');
+    difficultyText.className = 'difficulty-text';
+    difficultyText.style.color = complexityColor;
+
+
+    try {
+
+      difficultyText.textContent = getDifficultyText(game.complexity);
+      let ratingText = document.createElement('p');
+      ratingText.style.color = 'black'; // Set the color to black
+      ratingText.textContent = ' | Rating: ' + game.rating;
+      ratingText.style.display = 'inline';
+      difficultyText.appendChild(ratingText);
+    } catch (error) {
+      console.error('Error fetching game rating:', error);
+    }
+
+    name.addEventListener('click', () => {
+      detailsContainer.style.display = detailsContainer.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Adjust font size for longer game names
+    if (game.name.length > 23) {
+      name.style.fontSize = '1rem'; // Adjust this value as needed
+    }
+
+    detailsContainer.appendChild(description);
+    detailsContainer.appendChild(link);
+
+    box.appendChild(name);
+    box.appendChild(difficultyText);
+    box.appendChild(detailsContainer);
+
+    container.appendChild(box);
+  }
+}
+
+async function getRating(game) {
+        const gameId = extractGameId(game.bggLink);
+    const apiUrl = `https://boardgamegeek.com/xmlapi2/thing?id=${gameId}&stats=1`;
+
+      const response = await fetch(apiUrl);
+      const xmlData = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlData, 'text/xml');
+      const averageRating = xmlDoc.querySelector('average').getAttribute('value').substring(0, 4);
+
+      game.rating = averageRating;
+      console.log(averageRating);
+}
+
+function extractGameId(url) {
+  const idMatch = url.match(/(?:boardgame|boardgameexpansion)\/(\d+)/);
+  return idMatch ? idMatch[1] : null;
+}
+
+function getComplexitySymbol(complexity) {
+  if (complexity >= 1 && complexity <= 3) {
+    return "●";
+  } else if (complexity >= 4 && complexity <= 6) {
+    return "■";
+  } else if (complexity >= 7 && complexity <= 8) {
+    return "♦";
+  } else {
+    return "♦♦";
+  }
+}
+
+function getDifficultyText(complexity) {
+  if (complexity >= 1 && complexity <= 3) {
+    return "Easy";
+  } else if (complexity >= 4 && complexity <= 6) {
+    return "Medium";
+  } else if (complexity >= 7 && complexity <= 8) {
+    return "Complex";
+  } else {
+    return "Highly Complex";
+  }
+}
+
+function getComplexityColor(complexity) {
+  if (complexity >= 1 && complexity <= 3) {
+    return "green";
+  } else if (complexity >= 4 && complexity <= 6) {
+    return "blue";
+  } else if (complexity >= 7 && complexity <= 8) {
+    return "orange";
+  } else {
+    return "red";
+  }
+}
