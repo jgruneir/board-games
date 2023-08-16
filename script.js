@@ -8,7 +8,6 @@ const boardGames = [
   { name: "Gloomhaven: Forgotten Circles", description: "An expansion for the Gloomhaven base game.", bggLink: "https://boardgamegeek.com/boardgameexpansion/250337/gloomhaven-forgotten-circles" },
   { name: "Scythe", description: "An asymmetric board game set in an alternate-history 1920s period.", bggLink: "https://boardgamegeek.com/boardgame/169786/scythe" },
   { name: "Terraforming Mars", description: "A game where players work together to terraform the planet Mars.", bggLink: "https://boardgamegeek.com/boardgame/167791/terraforming-mars" },
-  { name: "Murder Mystery at the Circus", description: "Solve a murder mystery under the big top.", bggLink: "https://boardgamegeek.com/boardgame/4780/murder-mystery-circus" },
   { name: "Dominion", description: "A deck-building card game with multiple expansions.", bggLink: "https://boardgamegeek.com/boardgame/36218/dominion" },
   { name: "Citadels", description: "A game of city-building and intrigue.", bggLink: "https://boardgamegeek.com/boardgame/205398/citadels" },
   { name: "Citadels Classic", description: "A new edition of the classic city-building card game.", bggLink: "https://boardgamegeek.com/boardgame/478/game-citadels" },
