@@ -30,6 +30,7 @@ body {
 
 .box h2 {
   margin-top: 0;
+  margin-bottom: 0;
   color: #333;
     cursor: pointer; /* Add this line to change cursor on hover */
 
@@ -54,4 +55,8 @@ body {
 
 .box a:hover {
   background-color: #0056b3;
+}
+
+.difficulty-row {
+  margin-top:5px;
 }
