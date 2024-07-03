@@ -1,5 +1,5 @@
 # board-games
 games of mine
 
-chatgpt 98%
-jared 2%
+chatgpt 96%
+jared 4%
