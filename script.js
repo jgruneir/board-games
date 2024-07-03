@@ -1,7 +1,7 @@
 const boardGames = [
   { name: "Eldritch Horror", description: "A cooperative game of mystery and terror.", bggLink: "https://boardgamegeek.com/boardgame/146021/eldritch-horror", complexity: 9 },
   { name: "Spirit Island", description: "A cooperative settler-destruction strategy game.", bggLink: "https://boardgamegeek.com/boardgame/162886/spirit-island", complexity: 6 }, 
-  { name: "Sky Team", description: "A game of teamwork and strategy in aviation.", bggLink: "https://boardgamegeek.com/boardgame/373106/sky-team", complexity: 4 }
+  { name: "Sky Team", description: "A game of teamwork and strategy in aviation.", bggLink: "https://boardgamegeek.com/boardgame/373106/sky-team", complexity: 4 },
   { name: "Arkham Horror: Final Hour", description: "A fast-paced, cooperative dice-driven game set in the Lovecraftian universe.", bggLink: "https://boardgamegeek.com/boardgame/285773/arkham-horror-final-hour", complexity: 6 },
   { name: "Betrayal at House on the Hill", description: "A game that builds a new, unique haunted house every time you play.", bggLink: "https://boardgamegeek.com/boardgame/10547/betrayal-house-hill", complexity: 4 },
   { name: "Betrayal at Baldur's Gate", description: "Explore the dark corners of the city of Baldur's Gate and uncover its secrets.", bggLink: "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate", complexity: 4 },
