@@ -71,49 +71,6 @@ document.getElementById('sortToggle').addEventListener('change', () => {
   sortBoardGames();
 });
 
-const fileInput = document.getElementById('file-input');
-
-fileInput.addEventListener('change', (e) =>
-uploadFile(e.target.files[0]),
-);
-
-async function uploadFile(file) {
-
-
-  const headers = {
-    'Authorization': `Client-ID 546c25a59c58ad7`,
-  };
-    const formData = new FormData();
-    formData.append('image', file);
-    console.log(formData);
-
-      fetch("https://api.imgur.com/3/image", {
-    method: 'post',
-    headers: headers,
-    body: formData
-    })
-    .then(data => data.json()).then(data => {
-        console.log(data.data.link);
-        queryLens(data.data.link);
-    }).catch(error => {
-      console.log(error);
-    });
-}
-
-async function queryLens(imgurLink) {
-  const headers = {
-           'Access-Control-Allow-Origin': '*'
-        };
-    const response = await fetch("https://serpapi.com/search.json?engine=google_lens&url=" + imgurLink + "&api_key=c27d79b5383298a514e092fb234b6381049f45cef5f7f6ceb5ffae1a1e2afb56", {
-      headers:headers,
-      method: "GET",
-      mode: "no-cors"
-    });
-    const matches = await response.json();
-    console.log(matches);
-    console.log(matches.visual_matches[0].title);
-
-}
 
 async function sortBoardGames() {
   container.innerHTML = ''; // Clear the container before re-rendering
