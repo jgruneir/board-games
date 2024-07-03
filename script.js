@@ -1,5 +1,7 @@
 const boardGames = [
   { name: "Eldritch Horror", description: "A cooperative game of mystery and terror.", bggLink: "https://boardgamegeek.com/boardgame/146021/eldritch-horror", complexity: 9 },
+  { name: "Spirit Island", description: "A cooperative settler-destruction strategy game.", bggLink: "https://boardgamegeek.com/boardgame/162886/spirit-island", complexity: 6 }, 
+  { name: "Sky Team", description: "A game of teamwork and strategy in aviation.", bggLink: "https://boardgamegeek.com/boardgame/373106/sky-team", complexity: 4 }
   { name: "Arkham Horror: Final Hour", description: "A fast-paced, cooperative dice-driven game set in the Lovecraftian universe.", bggLink: "https://boardgamegeek.com/boardgame/285773/arkham-horror-final-hour", complexity: 6 },
   { name: "Betrayal at House on the Hill", description: "A game that builds a new, unique haunted house every time you play.", bggLink: "https://boardgamegeek.com/boardgame/10547/betrayal-house-hill", complexity: 4 },
   { name: "Betrayal at Baldur's Gate", description: "Explore the dark corners of the city of Baldur's Gate and uncover its secrets.", bggLink: "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate", complexity: 4 },
@@ -69,6 +71,50 @@ document.getElementById('sortToggle').addEventListener('change', () => {
   sortBoardGames();
 });
 
+const fileInput = document.getElementById('file-input');
+
+fileInput.addEventListener('change', (e) =>
+uploadFile(e.target.files[0]),
+);
+
+async function uploadFile(file) {
+
+
+  const headers = {
+    'Authorization': `Client-ID 546c25a59c58ad7`,
+  };
+    const formData = new FormData();
+    formData.append('image', file);
+    console.log(formData);
+
+      fetch("https://api.imgur.com/3/image", {
+    method: 'post',
+    headers: headers,
+    body: formData
+    })
+    .then(data => data.json()).then(data => {
+        console.log(data.data.link);
+        queryLens(data.data.link);
+    }).catch(error => {
+      console.log(error);
+    });
+}
+
+async function queryLens(imgurLink) {
+  const headers = {
+           'Access-Control-Allow-Origin': '*'
+        };
+    const response = await fetch("https://serpapi.com/search.json?engine=google_lens&url=" + imgurLink + "&api_key=c27d79b5383298a514e092fb234b6381049f45cef5f7f6ceb5ffae1a1e2afb56", {
+      headers:headers,
+      method: "GET",
+      mode: "no-cors"
+    });
+    const matches = await response.json();
+    console.log(matches);
+    console.log(matches.visual_matches[0].title);
+
+}
+
 async function sortBoardGames() {
   container.innerHTML = ''; // Clear the container before re-rendering
 
@@ -84,7 +130,6 @@ async function sortBoardGames() {
     const box = document.createElement('div');
     box.className = 'box';
     if(i == 1) {
-      console.log("here");    
       box.id = "topLeftBox";
     }
 
